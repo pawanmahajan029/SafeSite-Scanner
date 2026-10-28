@@ -1,189 +1,189 @@
-# URL Security Scanner
+<div align="center">
 
-Multi-level web URL security analysis tool for educational purposes and authorized penetration testing.
+# 🛡️ SafeSite Scanner
 
-## Tech Stack
+**Next-Generation Passive Web Security Scanner & Attack Surface Intelligence Platform**
 
-| Layer | Technology |
-|-------|-----------|
-| **Backend** | Python 3.11+ + FastAPI + SlowAPI + httpx |
-| **Frontend** | React 18 + Vite 5 + Tailwind CSS 3.4 |
-| **WebSocket** | FastAPI WebSocket (real-time scan progress) |
+[![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![React 18](https://img.shields.io/badge/Frontend-React%2018-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Bundler-Vite%205-646C9A?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Styling-Tailwind%20CSS-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Tests Passing](https://img.shields.io/badge/Tests-24%2F24%20Passed-brightgreen)](backend/tests/)
 
-## Architecture
+<p align="center">
+  <a href="#-key-features">Features</a> •
+  <a href="#-architecture">Architecture</a> •
+  <a href="#-quick-start">Quick Start</a> •
+  <a href="#-scoring-system">Scoring</a> •
+  <a href="#-api-reference">API Reference</a> •
+  <a href="#-security--ethics">Security & Ethics</a>
+</p>
 
-Two independent projects — no monorepo tooling:
+</div>
 
-```
-scanner_intelligent/
-├── backend/                  # FastAPI application
-│   ├── main.py               # Entrypoint
-│   ├── config/settings.py    # Configuration
-│   ├── routes/               # API handlers
-│   │   ├── scan.py           # Scanner endpoints
-│   │   ├── crawler.py        # Crawling + extended analysis
-│   │   ├── history.py        # Scan history & PDF report
-│   │   └── websocket.py      # Real-time progress
-│   ├── services/             # Business logic
-│   ├── utils/                # Validators
-│   └── data/                 # Signatures, CVE DB, fingerprints
-├── frontend/                 # Vite + React application
-│   └── src/
-│       ├── components/       # React components
-│       └── utils/api.js      # API client
-└── .env.example              # Configuration template
-```
+---
 
-The frontend proxies `/api` requests to the backend at `http://localhost:8000` (no CORS issues in dev).
+## ⚡ Overview
 
-## Features
-
-### Level 1 — Reconnaissance & Fingerprinting
-- Server detection and version identification
-- Technology stack fingerprinting (languages, frameworks, CMS, libraries)
-- HTTP security header analysis (HSTS, CSP, X-Frame-Options, etc.)
-- Security misconfiguration detection
-- Mozilla Observatory-style grading
-
-### Level 2 — Vulnerability Analysis
-- Local CVE database matching (20+ entries)
-- External CVE fetching (NVD/NIST API)
-- SSL/TLS certificate analysis (protocol version, cipher, expiry)
-- WAF detection (Cloudflare, ModSecurity, etc.)
-- Known vulnerability pattern matching
-
-### Level 3 — Parameter & Attack Vector Analysis
-- SQL injection vector detection
-- XSS reflection analysis
-- Path traversal identification
-- SSRF and open redirect checks
-- CSRF protection analysis
-- Rate limiting detection
-
-### Additional Modules
-- **Crawler** — recursive site crawling with depth/page limits, JSON-LD extraction, data-* attribute discovery
-- **OWASP Top 10** — automated OWASP 2021 risk assessment
-- **API Discovery** — endpoint enumeration from HTML/JS
-- **Dependency Checker** — known vulnerable library detection
-- **Attack Surface Mapping** — consolidated risk visualization
-- **Compliance Checker** — PCI-DSS, GDPR, HIPAA readiness
-- **Redirect Chain Analysis** — full redirect path tracing
-- **Subdomain Enumeration** — passive subdomain discovery via crt.sh
-- **Robots.txt & Sitemap** — policy and sitemap extraction
-- **Cookie Analysis** — security attributes per cookie
-- **Port Scanner** — TCP connect scan of 300+ common ports with service identification
-- **DNS Enumeration** — A, AAAA, CNAME, MX, NS, TXT, SOA record resolution
-- **Email Security** — SPF, DKIM (multi-selector), DMARC policy analysis with scoring
-- **Mixed Content Detection** — HTTPS page loading HTTP resources (img, script, iframe, fetch, etc.)
-- **Security.txt Check** — fetch and validate /.well-known/security.txt per RFC 9116
-- **Batch Scan** — scan up to 20 URLs in parallel
-- **History & Comparison** — scan persistence, diff between scans
-- **PDF Report** — export scan results as PDF with scores, vulns, missing headers, cookies, and compliance
-
-## Scoring
+**SafeSite Scanner** is a full-stack, automated web application security auditing tool. It delivers enterprise-grade reconnaissance, vulnerability matching, parameter risk profiling, and OWASP Top 10 compliance assessments through **safe, passive analysis** — discovering flaws without sending malicious exploitation payloads.
 
 ```
-total_score = level1_score * 0.3 + level2_score * 0.4 + level3_score * 0.3
+   Target URL
+       │
+       ▼
+ ┌──────────────┐      Level 1: Passive Recon & Server Fingerprint
+ │   SafeSite   ├────► Level 2: CVE Matching, SSL/TLS, & WAF Detection
+ │   Scanner    ├────► Level 3: Attack Vectors, XSS Reflection, & CSRF
+ └──────┬───────┘      Level 4: OWASP Top 10, DNS, Email Security & Compliance
+        │
+        ▼
+ 📊 Composite Security Score (0–100) + Priority Remediation Plan
 ```
 
-Weighted average (0–100) favoring vulnerability analysis.
+---
 
-## Quick Start
+## 🚀 Key Features
 
-### Backend
+### 🔍 Level 1 — Passive Reconnaissance & Fingerprinting
+* **Server & Stack Detection:** Identifies web server software, versions, languages, frameworks, and CMS.
+* **HTTP Security Header Audit:** Deep checks for `HSTS`, `CSP`, `X-Frame-Options`, `X-Content-Type-Options`, and `Permissions-Policy`.
+* **Cookie Hygiene:** Audits `Secure`, `HttpOnly`, and `SameSite` flags across all session cookies.
+* **Mozilla Observatory-Style Grading:** Provides a standardized security grade from A+ to F.
 
+### 🛡️ Level 2 — Vulnerability Analysis
+* **Local CVE Database:** Offline matching against high-risk software versions.
+* **Live NVD / NIST Integration:** Real-time query to the National Vulnerability Database.
+* **SSL/TLS Inspector:** Evaluates certificate validity, protocol versions (TLS 1.2/1.3), expiry, and weak ciphers.
+* **WAF Fingerprinting:** Passive detection for Cloudflare, AWS WAF, Akamai, Imperva, ModSecurity, and more.
+
+### 🎯 Level 3 — Attack Surface & Parameter Profiling
+* **Injection Vector Detection:** Identifies unencoded inputs susceptible to SQLi or command injection.
+* **Reflected XSS Analysis:** Evaluates parameter reflection in HTML bodies and response contexts.
+* **Path Traversal & SSRF Indicators:** Flags sensitive parameter names (`file=`, `url=`, `redirect=`, `proxy=`).
+* **CSRF & Rate Limiting Verification:** Evaluates form anti-CSRF token presence and client throttle behaviors.
+
+### 🌐 Extended Security Modules
+* **Site Crawler:** Recursive link and endpoint extraction with configurable depth.
+* **OWASP Top 10 (2021):** Automated risk mapping against OWASP categories.
+* **Compliance Assessment:** Readiness evaluations for PCI-DSS, GDPR, and HIPAA.
+* **DNS & Email Security:** Resolves A, AAAA, MX, NS, and evaluates SPF, DKIM, and DMARC enforcement.
+* **RFC 9116 Security.txt:** Validates standard security policy disclosures.
+* **Multi-Format Export:** Export findings as JSON, CSV, or formatted reports.
+
+---
+
+## 🏗️ Architecture
+
+```
+SafeSite-Scanner/
+├── backend/                  # FastAPI REST API (Python 3.11+)
+│   ├── main.py               # API Entrypoint & middleware
+│   ├── config/settings.py    # Environment settings & blocklists
+│   ├── routes/               # API route handlers
+│   │   ├── scan.py           # Core scanner endpoints
+│   │   ├── crawler.py        # Crawler & extended analytics
+│   │   ├── history.py        # Persistence & report generator
+│   │   └── websocket.py      # Real-time WebSocket scan progress
+│   ├── services/             # Core security analysis engines
+│   ├── data/                 # CVE catalog, signatures, tech fingerprints
+│   └── tests/                # Pytest automated test suite (24 tests)
+├── frontend/                 # Reactive SPA (React 18 + Vite 5 + Tailwind)
+│   ├── src/
+│   │   ├── components/       # UI Dashboard & visualization cards
+│   │   └── utils/api.js      # Axios client
+│   └── tailwind.config.js    # Cybersecurity color themes
+└── HOW_TO_RUN.md             # Detailed execution guide
+```
+
+---
+
+## 📊 Scoring System
+
+SafeSite Scanner computes a weighted composite score between **0 and 100**, placing heavier mathematical weight on confirmed vulnerabilities:
+
+$$\text{Total Score} = (\text{Level 1} \times 0.30) + (\text{Level 2} \times 0.40) + (\text{Level 3} \times 0.30)$$
+
+| Score Range | Status | Posture Meaning |
+| :---: | :---: | :--- |
+| **80 – 100** | 🟢 **Secure** | Strong defense-in-depth, modern headers, valid SSL/TLS, no high CVEs. |
+| **60 – 79** | 🔵 **Moderate** | Functional security with minor misconfigurations or missing headers. |
+| **40 – 59** | 🟡 **Weak / High Risk** | Vulnerabilities present or critical headers completely absent. |
+| **0 – 39** | 🔴 **Critical Risk** | Severe vulnerabilities, outdated stacks, or high-severity CVE matches. |
+
+---
+
+## ⚡ Quick Start
+
+### 1. Prerequisites
+* **Python 3.10+**
+* **Node.js 18+ & npm**
+
+### 2. Setup Backend
 ```bash
+# Navigate to backend
 cd backend
+
+# Create virtual environment
 python -m venv venv
-source venv/bin/activate  # or venv\Scripts\activate on Windows
+
+# Activate virtual environment
+# Windows:
+.\venv\Scripts\activate
+# Linux / macOS:
+source venv/bin/activate
+
+# Install dependencies
 pip install -r requirements.txt
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+
+# Start backend server
+uvicorn main:app --reload --host 127.0.0.1 --port 8000
 ```
+Backend API will be running on: **`http://127.0.0.1:8000`**  
+Interactive API Docs (Swagger UI): **`http://127.0.0.1:8000/docs`**
 
-### Frontend
-
+### 3. Setup Frontend
 ```bash
+# Open a second terminal and navigate to frontend
 cd frontend
+
+# Install packages
 npm install
+
+# Start Vite development server
 npm run dev
 ```
+Frontend web interface will be accessible on: **`http://localhost:5173`**
 
-Open `http://localhost:5173` in your browser.
+*(For a step-by-step terminal guide inside VS Code / Antigravity IDE, see [HOW_TO_RUN.md](HOW_TO_RUN.md)).*
 
-## Configuration
+---
 
-Copy `.env.example` to `.env` and adjust:
+## 🔌 API Reference
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `SECRET_KEY` | `change-me-in-production` | App secret key |
-| `EXTERNAL_API_ENABLED` | `true` | Enable external CVE/NVD lookups |
-| `MAX_BODY_SIZE` | `100000` | Max HTTP body size to analyze (bytes) |
+| Method | Endpoint | Description |
+| :---: | :--- | :--- |
+| `POST` | `/api/scan/full` | Full 3-level comprehensive security scan |
+| `POST` | `/api/scan/level1` | Level 1: Reconnaissance, fingerprinting & headers |
+| `POST` | `/api/scan/level2` | Level 2: CVE matching, SSL/TLS & WAF |
+| `POST` | `/api/scan/level3` | Level 3: Parameter analysis & attack vectors |
+| `POST` | `/api/scan/owasp` | OWASP Top 10 automated category evaluation |
+| `POST` | `/api/crawl` | Recursive site crawler & endpoint mapper |
+| `POST` | `/api/compliance` | PCI-DSS, GDPR, and HIPAA compliance check |
+| `GET`  | `/api/scans` | Retrieve scan history from local SQLite store |
+| `GET`  | `/api/health` | Health check and service status |
 
-## API Endpoints
+---
 
-### Scanner
+## 🔒 Security & Ethics
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `POST` | `/api/scan/full` | Full 3-level scan |
-| `POST` | `/api/scan/level1` | Level 1 only (fingerprinting) |
-| `POST` | `/api/scan/level2` | Level 2 only (vulnerabilities) |
-| `POST` | `/api/scan/level3` | Level 3 only (parameters) |
-| `POST` | `/api/scan/redirects` | Redirect chain analysis |
-| `POST` | `/api/scan/subdomains` | Subdomain enumeration |
-| `POST` | `/api/scan/robots` | Robots.txt & sitemap analysis |
-| `POST` | `/api/scan/batch` | Batch scan (up to 20 URLs) |
-| `POST` | `/api/scan/cookies` | Cookie security analysis |
-| `POST` | `/api/scan/grade` | Mozilla Observatory grading |
-| `POST` | `/api/scan/ports` | TCP port scan (300+ ports) |
-| `POST` | `/api/scan/dns` | DNS record enumeration |
-| `POST` | `/api/scan/email-security` | SPF/DKIM/DMARC email security |
-| `POST` | `/api/scan/mixed-content` | Mixed content (HTTP on HTTPS) |
-| `POST` | `/api/scan/security-txt` | RFC 9116 security.txt check |
+* **Passive Analysis Only:** SafeSite Scanner observes HTTP response headers, SSL certificates, DOM structures, and public metadata. It never injects destructive payloads or attempts unauthorized access.
+* **SSRF & Private IP Protection:** Resolves hostnames against RFC 1918, loopback (`127.0.0.0/8`), and internal link-local addresses to prevent Server-Side Request Forgery.
+* **Rate Limiting:** Enforces request quotas via `slowapi` to prevent target server denial of service.
 
-### Crawler & Extended
+---
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `POST` | `/api/crawl` | Recursive site crawling |
-| `POST` | `/api/scan/owasp` | OWASP Top 10 assessment |
-| `POST` | `/api/discover` | API endpoint discovery |
-| `POST` | `/api/dependencies` | Dependency vulnerability check |
-| `POST` | `/api/compliance` | Compliance check (PCI/GDPR/HIPAA) |
-| `POST` | `/api/surface` | Attack surface mapping |
+## 📄 License
 
-### History & Reports
-
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/api/scans` | List past scans |
-| `GET` | `/api/scans/:id` | Get scan details |
-| `DELETE` | `/api/scans/:id` | Delete a scan |
-| `GET` | `/api/scans/:id/report` | Download PDF report |
-| `GET` | `/api/scans/compare` | Compare two scans |
-| `GET` | `/api/stats` | Scan statistics |
-
-### WebSocket
-
-| Path | Description |
-|------|-------------|
-| `WS` | `/ws/{client_id}` | Real-time scan progress updates |
-
-### Health
-
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/api/health` | Service health check |
-
-## Security
-
-- **Rate limiting**: 10 requests/minute per IP (via SlowAPI)
-- **Private IP blocking**: RFC 1918, loopback, and reserved ranges blocked
-- **DNS rebinding protection**: Resolved IPs validated against blocklist
-- **Passive analysis only**: No payloads or exploitation sent
-- **All scans logged**: Full audit trail with client IP and timestamp
-
-## Disclaimer
-
-This tool is for educational purposes and authorized penetration testing only. Only scan websites you have explicit permission to test. Unauthorized scanning may violate applicable laws.
+Distributed under the **MIT License**. See `LICENSE` for more information.
